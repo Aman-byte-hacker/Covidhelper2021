@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block style %}
+<style>
+    .img_corona{
+      width: 70px;
+      height: 100px;
+      animation: ballon 4s 1;
+      background-color: white;
+      
+    }
+    @keyframes ballon{
+      0%{
+        width: 800px;
+        height: 700px;
+      }
+      100%{
+        width: 70px;
+        height: 100px;
+      }
+    }
+    
+    .city_name{
+      margin:4px, 4px;
+      padding:6px;
+      width: 500px;
+      height: 200px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align:justify;
+    }
+    @media only screen and (max-width: 659px) {
+      #table_res{
+       
+      }
+      @keyframes ballon{
+        0%{
+          width: 350px;
+          height: 600px;
+        }
+        100%{
+          width: 70px;
+          height: 100px;
+        }
+      }
+    }
+</style>
+{% endblock %}
+{% block content %}
+  <p style="text-transform: capitalize;" class="text-center text-danger mt-2">Put A Mask on your face like me and keep social distancing</p>
+  <div class="text-center">
+    <img class="img_corona" src="https://thumbs.dreamstime.com/b/yellow-balloon-medical-mask-doodle-eyes-conceptual-image-birthday-party-corona-virus-quarantine-shocked-179182222.jpg" alt="corona">
+  </div>
+  <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-4 city_name">
+                {% for city in cities %}
+                  <ul class="list-group">
+                    <li class="list-group-item text-center"><a href="/?city={{city.id}}" style="text-decoration: none !important;">{{city}}</a></li>
+                  </ul>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="table-responsive">
+            <div class="col mt-4 ">
+              <table  class="table table-stripped table-secondary">
+              <thead>
+                    <tr>
+                      <th class="text-center" rowspan="2">Hospital</th>
+                      {% for facility in facilities %}
+                          <th colspan="2" class="text-center">{{facility.title}}</th>
+                      {% endfor %}
+                    </tr> 
+                    <tr class="text-center">
+                        {% for facility in facilities %}
+                            <th>Total</th>
+                            <th>Available</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hospital in hospitals %}
+                    <tr class="text-center">
+                        <td><a style="text-decoration:none;" href="/see/{{hospital.id}}">{{hospital.name}}</a></td>
+                        {% get_availablities hospital as availabilities %}
+                        {% for availability in availabilities %}
+                            <td>{{availability.total}}</td>
+                            <td class="{% get_class availability.available %}">{{availability.available}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            </div>
+          </div>
+       
+    </div>
+    <footer>
+      <div class="text-center border">
+        <p>Covid-19@2021</p>
+        <p>Developer : <span><a target="__Amanvyas" style="text-decoration: none;" href="https://vyasbyte.pythonanywhere.com/aboutus">Aman vyas</a></span></p>
+      </div>
+    </footer>
+{% endblock %}
